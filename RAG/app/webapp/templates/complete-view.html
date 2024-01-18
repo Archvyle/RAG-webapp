@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		
+		<style>
+			table {
+				font-family: arial, sans-serif;
+				border-collapse: collapse;
+				width: 100%;
+			}
+
+			td, th {
+				border: 1px solid #dddddd;
+				text-align: left;
+				padding: 8px;
+			}
+
+			tr:nth-child(even) {
+				background-color: #dddddd;
+			}
+		</style>
+
+	</head>
+
+	<body bgcolor="#848484">
+
+		- <a href="/">Back to index</a><br><br>
+
+		<table>
+			{%for i in range(0, length)%}
+				<tr>
+					<th>{{collectionItems['documents'][i]}}</th>
+					<th>{{collectionItems['ids'][i]}}</th>
+				</tr>
+			{% endfor %}
+		</table>
+
+	</body>
+</html>

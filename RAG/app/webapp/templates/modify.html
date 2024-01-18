@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+	</head>
+
+	<body bgcolor="#848484">
+
+		- <a href="/">Back to index</a><br><br>
+
+		<form method="POST">
+			<input type="submit" name="action" value="EMPTY DB">
+		</form>
+
+		<br><hr><br>
+		<form method="POST">
+			ADD TO COLLECTION<br>
+			<label for="document_add">Document: </label>
+			<input type="text" id="document_add" name="document_add" required>
+			<input type="submit" name="action" value="Add">
+		</form>
+
+		<br><hr><br>
+		<form method="POST" enctype="multipart/form-data">
+			ADD PDF TO COLLECTION<br>
+			<input type="file" id="file" name="file" accept=".pdf" required>
+			<input type="submit" name="action" value="Add PDF">
+		  </form>
+
+		<br><hr><br>
+		<form method="POST">
+			REMOVE FROM COLLECTION<br>
+			<label for="id_remove">ID: </label>
+			<input type="text" id="id_remove" name="id_remove" required>
+			<input type="submit" name="action" value="Remove">	
+		</form>
+
+		<br><hr><br>
+		<form method="POST">
+			UPDATE COLLECTION<br>
+			<label for="id_update">ID: </label>
+			<input type="text" id="id_update" name="id_update" required>
+			<label for="document_update">Document: </label>
+			<input type="text" id="document_update" name="document_update" required>
+			<input type="submit" name="action" value="Update">	
+		</form>
+	</body>
+</html>

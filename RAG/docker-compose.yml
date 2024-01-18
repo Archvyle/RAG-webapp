@@ -1,0 +1,17 @@
+version: "3.11.5"
+services:
+  chromadb-container:
+    image: chromadb/chroma
+    container_name: 'chromadb-container'
+    ports:
+      - "8000:8000"
+  flask-container:
+    image: python-docker
+    container_name: 'flask-container'
+    ports:
+      - 5000:5000
+volumes:
+  index_data:
+    driver: local
+  backups:
+    driver: local
