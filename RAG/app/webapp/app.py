@@ -10,6 +10,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 sum_results = ""
 RAG_results = ""
+questions = ""
 results = None
 length = 0
 
@@ -21,6 +22,10 @@ def query(input, nQueries):
     global results, length
     results = chromadbClient.query(str(input), int(nQueries))
     length = len(results['ids'][0])
+
+def generate_questions(questions_query):
+    global questions
+    questions = chromadbClient.RAG_query("Generate 10 questions about this topic: " + str(questions_query))
 
 def add(documents):
     chromadbClient.add(documents)
@@ -56,16 +61,9 @@ def query_page():
         return render_template('query.html', results=results, length=length)
     
     elif request.method == 'POST':
-        if request.form.get('action') == 'Search':
-            queryInput = request.form.get('query')
-            nQueries = request.form.get('nQueries')
-            print(queryInput)
-            query(queryInput, nQueries)
-            return render_template('query.html', sum_results=sum_results, RAG_results=RAG_results, results=results, length=length)
 
-        elif request.form.get('action') == 'RAG Search':
+        if request.form.get('action') == 'RAG Search':
             RAG_queryInput = request.form.get('RAG_query')
-            print(RAG_queryInput)
             if request.form.get('source'):
                 specifySource = True
             else:
@@ -75,10 +73,21 @@ def query_page():
             else:
                 summarizeResult = False
             RAG_query(RAG_queryInput, summarizeResult, specifySource)
-            return render_template('query.html', sum_results=sum_results, RAG_results=RAG_results, results=results, length=length)
+            return render_template('query.html', questions=questions, sum_results=sum_results, RAG_results=RAG_results, results=results, length=length)
+    
+        elif request.form.get('action') == 'Search':
+            queryInput = request.form.get('query')
+            nQueries = request.form.get('nQueries')
+            query(queryInput, nQueries)
+            return render_template('query.html', questions=questions, sum_results=sum_results, RAG_results=RAG_results, results=results, length=length)
+        
+        elif request.form.get('action') == 'Generate Questions':
+            questions_query = request.form.get('questions_query')
+            generate_questions(questions_query)
+            return render_template('query.html', questions=questions, sum_results=sum_results, RAG_results=RAG_results, results=results, length=length)
         
         else:
-             return render_template('query.html', sum_results=sum_results, RAG_results=RAG_results, results=results, length=length)
+             return render_template('query.html', questions=questions, sum_results=sum_results, RAG_results=RAG_results, results=results, length=length)
 
 
 @app.route('/modify', methods=['GET', 'POST'])
