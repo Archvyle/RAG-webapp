@@ -46,6 +46,16 @@
 
 		<br><hr><br>
 		<form method="POST">
+			<label for="questions_query">GENERATE QUESTIONS ABOUT AN ARGUMENT: </label>
+			<br>
+			<input type="text" id="questions_query" name="questions_query" required>
+			<input type="submit" name="action" value="Generate Questions">
+		</form>
+		<p>QUESTIONS:</p>
+		{{questions}}
+
+		<br><hr><br>
+		<form method="POST">
 			<label for="query">QUERY: </label>
 			<br>
 			<input type="text" id="query" name="query">
