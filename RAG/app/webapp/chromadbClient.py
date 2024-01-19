@@ -5,10 +5,13 @@ from langchain_openai import ChatOpenAI
 from langchain_community.embeddings.sentence_transformer import SentenceTransformerEmbeddings
 from langchain_community.document_loaders import PyPDFLoader
 
+# OPENAI API KEY QUA!!!
+openai_api_key = "dkjhgkjdhgkkahgldblablabla"
 
-openai_api_key = ""
 name = "collection_name"
+# tipo di distance function (tra 'l2', 'ip' e 'cosine')
 metadata_options = {"hnsw:space": "cosine"}
+
 collection = None
 maxLength = 0
 
@@ -20,9 +23,11 @@ def query(input, n_results):
     results = collection.query(query_texts=[input], n_results=n_results)
     return results
 
+# quando si aggiungono nuovi documenti l'ID viene scelto da getNextPos()
 def add(documents):
     collection.add(ids=[str(getNextPos())], documents=documents)
 
+# un pdf (presente nella stessa directory dell'app) viene diviso in un documento per ogni slide da pypdf e ogni documento viene aggiunto al db
 def addFromPDF(path):
     print(path)
     loader = PyPDFLoader(path)
@@ -39,6 +44,9 @@ def update(ids, documents):
 def getCollection():
     return collection.get()
 
+# questa funzione trova il primo numero mancante in una lista di numeri ordinati
+# esempio: [1, 2, 3, 4, 5] --DELETE--> [1, 3, 4, 5] --getNextPos()--> 2
+# se il db è vuoto viene restituito 1 come ID
 def getNextPos():
     collectionIDs = getCollection()['ids']
     collectionIDs_string = [eval(i) for i in collectionIDs]
@@ -51,6 +59,7 @@ def getNextPos():
             return i
     return length+1
 
+# scorre ed elimina le righe del db
 def emptyDB():
     for i in collection.get()['ids']:
         collection.delete(ids=[i])
@@ -72,6 +81,7 @@ client = chromadb.HttpClient(host="chromadb-container", port=8000)
 # client on this machine
 # client = chromadb.Client()
 
+# con get_or_create se la collection esiste già viene gettata
 collection = client.get_or_create_collection(name, metadata_options)
 
 chroma_db = Chroma(client=client, 
